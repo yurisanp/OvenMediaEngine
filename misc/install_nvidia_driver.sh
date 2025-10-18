@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NVIDIA_DRIVER_VERSION=
+NVIDIA_DRIVER_VERSION=537.58
 
 ##########################################################################################
 # Environment Variables
