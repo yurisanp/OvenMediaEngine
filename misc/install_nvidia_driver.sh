@@ -1,5 +1,5 @@
 #!/bin/bash
-NVIDIA_DRIVER_VERSION=537.58
+NVIDIA_DRIVER_VERSION=535
 
 ##########################################################################################
 # Environment Variables
@@ -90,9 +90,14 @@ install_base_ubuntu()
         sudo add-apt-repository -y  ppa:graphics-drivers/ppa
 
         sudo apt -y update
-
-        # installation with specific version
-        sudo apt-get install -y --no-install-recommends nvidia-driver-537.58
+        if [ -z "$NVIDIA_DRIVER_VERSION" ]
+        then 
+            # installation with recommended version
+            sudo ubuntu-drivers autoinstall
+        else
+            # installation with specific version
+            sudo apt-get install -y --no-install-recommends nvidia-driver-${NVIDIA_DRIVER_VERSION}
+        fi     
         sudo apt-get install -y --no-install-recommends nvidia-cuda-toolkit
 
         success_exit
@@ -185,8 +190,13 @@ install_base_rocky()
         sudo reboot
     fi
 
-
-    sudo dnf module install nvidia-driver:537.58 -y
+    if [ -z "$NVIDIA_DRIVER_VERSION" ]; then 
+        # installation with recommended version
+        sudo dnf module install nvidia-driver:latest-dkms -y
+    else
+        # installation with specific version
+        sudo dnf module install nvidia-driver:${NVIDIA_DRIVER_VERSION} -y
+    fi     
 
     # Install CUDA toolkit (optional)
     sudo dnf install cuda-toolkit -y
