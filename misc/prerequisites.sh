@@ -263,6 +263,7 @@ install_ffmpeg()
     # If there is an enable-nvc option, add nvcodec
     if [ "$NVIDIA_NV_CODEC_HWACCELS" = true ] ; then
         ADDI_CFLAGS+="-I/usr/local/cuda/include "
+        ADDI_CFLAGS+="-gencode arch=compute_52,code=sm_52 "
         ADDI_LDFLAGS="-L/usr/local/cuda/lib64 "
         ADDI_LICENSE+=" --enable-nonfree "
         ADDI_LIBS+=" --enable-cuda-nvcc --enable-cuda-llvm --enable-nvenc --enable-nvdec --enable-ffnvcodec --enable-cuvid "
