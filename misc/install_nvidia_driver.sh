@@ -90,14 +90,9 @@ install_base_ubuntu()
         sudo add-apt-repository -y  ppa:graphics-drivers/ppa
 
         sudo apt -y update
-        if [ -z "$NVIDIA_DRIVER_VERSION" ]
-        then 
-            # installation with recommended version
-            sudo ubuntu-drivers autoinstall
-        else
-            # installation with specific version
-            sudo apt-get install -y --no-install-recommends nvidia-driver-${NVIDIA_DRIVER_VERSION}
-        fi     
+
+        # installation with specific version
+        sudo apt-get install -y --no-install-recommends nvidia-driver-537.58
         sudo apt-get install -y --no-install-recommends nvidia-cuda-toolkit
 
         success_exit
