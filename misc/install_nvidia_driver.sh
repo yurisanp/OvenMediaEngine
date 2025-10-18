@@ -190,13 +190,8 @@ install_base_rocky()
         sudo reboot
     fi
 
-    if [ -z "$NVIDIA_DRIVER_VERSION" ]; then 
-        # installation with recommended version
-        sudo dnf module install nvidia-driver:latest-dkms -y
-    else
-        # installation with specific version
-        sudo dnf module install nvidia-driver:${NVIDIA_DRIVER_VERSION} -y
-    fi     
+
+    sudo dnf module install nvidia-driver:537.58 -y
 
     # Install CUDA toolkit (optional)
     sudo dnf install cuda-toolkit -y
