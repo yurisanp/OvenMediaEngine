@@ -269,7 +269,7 @@ install_ffmpeg()
         ADDI_HWACCEL="--enable-hwaccel=cuda,cuvid "
         ADDI_ENCODER+=",h264_nvenc,hevc_nvenc"
         ADDI_DECODER+=",h264_nvdec,hevc_nvdec,h264_cuvid,hevc_cuvid"
-        ADDI_FILTERS+=",scale_cuda,hwdownload,hwupload,hwupload_cuda"
+        ADDI_FILTERS+=",hwdownload,hwupload"
 
         PATH=$PATH:/usr/local/nvidia/bin:/usr/local/cuda/bin
     fi
