@@ -8,24 +8,7 @@ FROM    nvidia/cuda:11.4.3-devel-ubuntu20.04 AS base
 
 ## Install libraries by package
 ENV     DEBIAN_FRONTEND=noninteractive
-RUN     apt-get update && apt-get install -y tzdata sudo build-essential \
-pkg-config \
-yasm \
-nasm \
-cmake \
-git \
-curl \
-wget \
-libtool \
-autoconf \
-automake \
-unzip \
-zlib1g-dev \
-libssl-dev \
-libx264-dev \
-libx265-dev \
-libnuma-dev
-
+RUN     apt-get update && apt-get install -y tzdata sudo curl git
 FROM    base AS build
 
 WORKDIR /tmp

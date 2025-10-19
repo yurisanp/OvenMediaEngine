@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Server version="8">
+	<Name>OvenMediaEngine</Name>
+	<!-- Host type (origin/edge) -->
+	<Type>origin</Type>
+	<!-- Specify IP address to bind ("*" means all IPv4 IPs, "::" means all IPv6 IPs) -->
+	<!-- Uncomment the line below to enable IPv6 -->
+	<!-- <IP>::</IP> -->
+	<IP>*</IP>
+	<PrivacyProtection>false</PrivacyProtection>
+
+	<!-- 
+	To get the public IP address(mapped address of stun) of the local server. 
+	This is useful when OME cannot obtain a public IP from an interface, such as AWS or docker environment. 
+	If this is successful, you can use ${PublicIP} in your settings.
+	-->
+	<StunServer>stun.ovenmediaengine.com:13478</StunServer>
+
+	<Modules>
+		<HTTP2>
+			<Enable>true</Enable>
+		</HTTP2>
+		<ERTMP>
+            <Enable>true</Enable>
+        </ERTMP>
+	</Modules>
+
+	<!-- Settings for the ports to bind -->
+	<Bind>
+
+		<Providers>
+			<RTMP>
+				<Port>1935</Port>
+				<WorkerCount>1</WorkerCount>
+			</RTMP>
+			<SRT>
+				<Port>9999</Port>
+				<WorkerCount>1</WorkerCount>
+			</SRT>
+		</Providers>
+
+		<Publishers>
+			<OVT>
+				<Port>9000</Port>
+				<WorkerCount>1</WorkerCount>
+			</OVT>
+		</Publishers>
+	</Bind>
+
+	<VirtualHosts>
+		<!-- You can use wildcard like this to include multiple XMLs -->
+		<VirtualHost include="VHost*.xml" />
+		<VirtualHost>
+			<Name>default</Name>
+			<!--Distribution is a value that can be used when grouping the same vhost distributed across multiple servers. This value is output to the events log, so you can use it to aggregate statistics. -->
+			<Distribution>ovenmediaengine.com</Distribution>
+
+			<!-- Settings for multi ip/domain and TLS -->
+			<Host>
+				<Names>
+
+					<Name>*</Name>
+				</Names>
+			</Host>
+
+			<OriginMapStore>
+				<RedisServer>
+					<Host>yustream-htg:6379</Host>
+					<Auth></Auth>
+				</RedisServer>
+				<OriginHostName>yustream-ome</OriginHostName>
+			</OriginMapStore>
+
+
+			<!-- Default CORS Settings -->
+			<CrossDomains>
+				<Url>*</Url>
+			</CrossDomains>
+
+			<!-- Settings for applications -->
+			<Applications>
+				<Application>
+					<Name>live</Name>
+					<Type>live</Type>
+					<OutputProfiles>
+						<Decodes>
+							<ThreadCount>2</ThreadCount>
+						</Decodes>
+
+						<HWAccels>
+							<Decoder>
+									<Enable>true</Enable>
+									<Modules>nv</Modules>
+							</Decoder>
+							<Encoder>
+									<Enable>true</Enable>
+									<Modules>nv</Modules>
+							</Encoder>
+						</HWAccels>
+
+						<OutputProfile>
+							<Name>live</Name>
+							<OutputStreamName>${OriginStreamName}</OutputStreamName>
+
+							<Playlist>
+								<Name>ABR</Name>
+								<FileName>abr</FileName>
+								<Options>
+									<WebRtcAutoAbr>true</WebRtcAutoAbr>
+									<HLSChunklistPathDepth>0</HLSChunklistPathDepth>
+									<EnableTsPackaging>true</EnableTsPackaging>
+								</Options>
+								<RenditionTemplate>
+									<Name>${Height}p ${Bitrate}kbps</Name>
+									<VideoTemplate>
+										<EncodingType>all</EncodingType>
+									</VideoTemplate>
+									<AudioTemplate>
+										<EncodingType>all</EncodingType>
+									</AudioTemplate>
+								</RenditionTemplate>
+							</Playlist>
+							<Playlist>
+								<Name>Fonte</Name>
+								<FileName>fonte</FileName>
+								<Options>
+									<WebRtcAutoAbr>true</WebRtcAutoAbr>
+									<HLSChunklistPathDepth>0</HLSChunklistPathDepth>
+									<EnableTsPackaging>true</EnableTsPackaging>
+								</Options>
+								<Rendition>
+									<Name>Bypass</Name>
+									<Video>bypass_video</Video>
+									<Audio>aac_audio</Audio>
+								</Rendition>
+							</Playlist>
+							<Playlist>
+								<Name>1080p</Name>
+								<FileName>1080</FileName>
+								<Options>
+									<WebRtcAutoAbr>true</WebRtcAutoAbr>
+									<HLSChunklistPathDepth>0</HLSChunklistPathDepth>
+									<EnableTsPackaging>true</EnableTsPackaging>
+								</Options>
+								<Rendition>
+									<Name>Bypass</Name>
+									<Video>video_1080</Video>
+									<Audio>aac_audio</Audio>
+								</Rendition>
+							</Playlist>
+							<Playlist>
+								<Name>720p</Name>
+								<FileName>720</FileName>
+								<Options>
+									<WebRtcAutoAbr>true</WebRtcAutoAbr>
+									<HLSChunklistPathDepth>0</HLSChunklistPathDepth>
+									<EnableTsPackaging>true</EnableTsPackaging>
+								</Options>
+								<Rendition>
+									<Name>Bypass</Name>
+									<Video>video_720</Video>
+									<Audio>aac_audio</Audio>
+								</Rendition>
+							</Playlist>
+
+							<Encodes>
+								<Video>
+									<Name>bypass_video</Name>
+									<Bypass>true</Bypass>
+								</Video>
+								<Video>
+									<Name>video_1080</Name>
+									<Codec>h265</Codec>
+									<Bitrate>5024000</Bitrate>
+									<Width>1920</Width>
+									<Height>1080</Height>
+									<Framerate>60</Framerate>
+									<KeyFrameInterval>120</KeyFrameInterval>
+									<BFrames>0</BFrames>
+									<Preset>faster</Preset>
+								</Video>
+								<Video>
+									<Name>video_720</Name>
+									<Codec>h265</Codec>
+									<Bitrate>2536000</Bitrate>
+									<Width>1280</Width>
+									<Height>720</Height>
+									<Framerate>30</Framerate>
+									<KeyFrameInterval>60</KeyFrameInterval>
+									<BFrames>0</BFrames>									
+									<Preset>faster</Preset>
+								</Video>
+								<Audio>
+									<Name>aac_audio</Name>
+									<Codec>aac</Codec>
+									<Bitrate>128000</Bitrate>
+									<Samplerate>48000</Samplerate>
+									<Channel>2</Channel>
+									<BypassIfMatch>
+										<Codec>eq</Codec>
+									</BypassIfMatch>
+								</Audio>
+							</Encodes>
+						</OutputProfile>
+					</OutputProfiles>
+					<Providers>
+						<RTMP />
+						<SRT />
+					</Providers>
+					<Publishers>
+						<AppWorkerCount>1</AppWorkerCount>
+						<StreamWorkerCount>8</StreamWorkerCount>
+						<OVT />
+					</Publishers>
+				</Application>
+			</Applications>
+		</VirtualHost>
+	</VirtualHosts>
+</Server>
