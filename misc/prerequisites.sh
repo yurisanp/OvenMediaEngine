@@ -265,7 +265,7 @@ install_ffmpeg()
         ADDI_CFLAGS+="-I/usr/local/cuda/include "
         ADDI_LDFLAGS="-L/usr/local/cuda/lib64 "
         ADDI_LICENSE+=" --enable-nonfree "
-        ADDI_LIBS+=" --enable-cuda-nvcc --enable-libnpp --enable-nvenc --enable-nvdec --enable-ffnvcodec --enable-cuvid --nvccflags=\"-gencode arch=compute_52,code=sm_52\" "
+        ADDI_LIBS+=" --enable-cuda-nvcc --enable-libnpp --enable-nvenc --enable-nvdec --enable-ffnvcodec --enable-cuvid "
         ADDI_HWACCEL="--enable-hwaccel=cuda,cuvid "
         ADDI_ENCODER+=",h264_nvenc,hevc_nvenc"
         ADDI_DECODER+=",h264_nvdec,hevc_nvdec,h264_cuvid,hevc_cuvid"
@@ -349,6 +349,7 @@ install_ffmpeg()
     --prefix="${PREFIX}" \
     --extra-cflags="-I${PREFIX}/include ${ADDI_CFLAGS}"  \
     --extra-ldflags="${ADDI_LDFLAGS} -L${PREFIX}/lib -Wl,-rpath,${PREFIX}/lib -Wl,--disable-new-dtags" \
+    --nvccflags="-gencode arch=compute_52,code=sm_52" \
     --extra-libs=-ldl ${ADDI_EXTRA_LIBS} \
     ${ADDI_LICENSE} \
     --disable-everything --disable-programs --disable-avdevice --disable-dwt --disable-lsp --disable-faan --disable-pixelutils \
