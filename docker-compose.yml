@@ -13,9 +13,15 @@ services:
                 - driver: nvidia
                   count: 1
                   capabilities: [gpu]
-    network_mode: host
+    ports:
+      # RTMP port for OBS ingestion
+      - "1935:1935"
+      # OVT port for OBS streaming
+      - "9000:9000"
+      # SRT port for OBS streaming  
+      - "9999:9999/udp"
     environment:
-    - OME_HOST_IP=192.168.0.160
+    - OME_HOST_IP=yustream-ome
     - OME_ORIGIN_PORT=9000
     - OME_RTMP_PROV_PORT=1935
     - OME_SRT_PROV_PORT=9999

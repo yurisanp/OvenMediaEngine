@@ -172,21 +172,21 @@
 								<Video>
 									<Name>video_1080</Name>
 									<Codec>h265</Codec>
-									<Bitrate>5024000</Bitrate>
+									<Bitrate>4000000</Bitrate>
 									<Width>1920</Width>
 									<Height>1080</Height>
 									<Framerate>60</Framerate>
-									<KeyFrameInterval>120</KeyFrameInterval>
+									<KeyFrameInterval>60</KeyFrameInterval>
 									<BFrames>0</BFrames>
 									<Preset>faster</Preset>
 								</Video>
 								<Video>
 									<Name>video_720</Name>
 									<Codec>h265</Codec>
-									<Bitrate>2536000</Bitrate>
+									<Bitrate>2000000</Bitrate>
 									<Width>1280</Width>
 									<Height>720</Height>
-									<Framerate>30</Framerate>
+									<Framerate>60</Framerate>
 									<KeyFrameInterval>60</KeyFrameInterval>
 									<BFrames>0</BFrames>									
 									<Preset>faster</Preset>
